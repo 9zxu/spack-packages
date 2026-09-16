@@ -235,7 +235,15 @@ class CompilerWrapper(Package):
         for item in env_paths:
             env.prepend_path("SPACK_COMPILER_WRAPPER_PATH", item)
 
-        env.append_flags("SPACK_CFLAGS", self.spec.extra_c_args[dependent_spec.name])
+        # Add extra flags set by compiler packages in setup_dependent_package
+        for attr, env_var in (
+            ("extra_c_args", "SPACK_CFLAGS"),
+            ("extra_cxx_args", "SPACK_CXXFLAGS"),
+            ("extra_f_args", "SPACK_FFLAGS"),
+        ):
+            extra_args = getattr(self.spec, attr, {}).get(dependent_spec.name, [])
+            if extra_args:
+                env.append_flags(env_var, " ".join(extra_args))
 
     def setup_dependent_package(self, module, dependent_spec):
         def _spack_compiler_attribute(*, language: str) -> str:
