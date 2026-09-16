@@ -237,13 +237,13 @@ class CompilerWrapper(Package):
 
         # Add extra flags set by compiler packages in setup_dependent_package
         for attr, env_var in (
-            ("extra_c_args", "SPACK_CFLAGS"),
-            ("extra_cxx_args", "SPACK_CXXFLAGS"),
-            ("extra_f_args", "SPACK_FFLAGS"),
+            ("extra_c_flags", "SPACK_CFLAGS"),
+            ("extra_cxx_flags", "SPACK_CXXFLAGS"),
+            ("extra_f_flags", "SPACK_FFLAGS"),
         ):
-            extra_args = getattr(self.spec, attr, {}).get(dependent_spec.name, [])
-            if extra_args:
-                env.append_flags(env_var, " ".join(extra_args))
+            extra_flags = getattr(self.spec, attr, {}).get(dependent_spec.name, [])
+            if extra_flags:
+                env.append_flags(env_var, " ".join(extra_flags))
 
     def setup_dependent_package(self, module, dependent_spec):
         def _spack_compiler_attribute(*, language: str) -> str:

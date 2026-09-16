@@ -790,22 +790,22 @@ class Gcc(AutotoolsPackage, GNUMirrorPackage, CompilerPackage):
 
         # Flags are stored per dependent and per language on the compiler wrapper spec
         compiler_wrapper = dependent_spec["compiler_wrapper"]
-        for attr in ("extra_c_args", "extra_cxx_args", "extra_f_args"):
+        for attr in ("extra_c_flags", "extra_cxx_flags", "extra_f_flags"):
             if not hasattr(compiler_wrapper, attr):
                 setattr(compiler_wrapper, attr, {})
 
-        extra_c_args = compiler_wrapper.extra_c_args.setdefault(dependent_spec.name, [])
-        extra_cxx_args = compiler_wrapper.extra_cxx_args.setdefault(dependent_spec.name, [])
-        extra_f_args = compiler_wrapper.extra_f_args.setdefault(dependent_spec.name, [])
+        extra_c_flags = compiler_wrapper.extra_c_flags.setdefault(dependent_spec.name, [])
+        extra_cxx_flags = compiler_wrapper.extra_cxx_flags.setdefault(dependent_spec.name, [])
+        extra_f_flags = compiler_wrapper.extra_f_flags.setdefault(dependent_spec.name, [])
 
         if dependent_spec.satisfies(f"%[usages=+sarif virtuals=c]{self.spec}"):
-            extra_c_args.append("-fdiagnostics-format=sarif-file")
+            extra_c_flags.append("-fdiagnostics-format=sarif-file")
 
         if dependent_spec.satisfies(f"%[usages=+sarif virtuals=cxx]{self.spec}"):
-            extra_cxx_args.append("-fdiagnostics-format=sarif-file")
+            extra_cxx_flags.append("-fdiagnostics-format=sarif-file")
 
         if dependent_spec.satisfies(f"%[usages=+sarif virtuals=fortran]{self.spec}"):
-            extra_f_args.append("-fdiagnostics-format=sarif-file")
+            extra_f_flags.append("-fdiagnostics-format=sarif-file")
 
     def patch(self):
         spec = self.spec
