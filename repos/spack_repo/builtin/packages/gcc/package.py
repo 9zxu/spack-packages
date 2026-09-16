@@ -783,6 +783,12 @@ class Gcc(AutotoolsPackage, GNUMirrorPackage, CompilerPackage):
             self.gnu_mirror_path = self.gnu_mirror_path.replace("xz", "bz2")
         return super().url_for_version(version)
 
+    def setup_dependent_package(self, module, dependent_spec):
+        if dependent_spec.satisfies(f"%[usages=+sarif]{self.spec}"):
+            dependent_spec["compiler_wrapper"].extra_c_args[dependent_spec.name].append(
+                "-fdiagnostics-format=sarif"
+            )
+
     def patch(self):
         spec = self.spec
         prefix = self.spec.prefix

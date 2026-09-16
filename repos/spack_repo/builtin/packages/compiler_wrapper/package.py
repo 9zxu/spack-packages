@@ -235,6 +235,8 @@ class CompilerWrapper(Package):
         for item in env_paths:
             env.prepend_path("SPACK_COMPILER_WRAPPER_PATH", item)
 
+        env.append_flags("SPACK_CFLAGS", self.spec.extra_c_args[dependent_spec])
+
     def setup_dependent_package(self, module, dependent_spec):
         def _spack_compiler_attribute(*, language: str) -> str:
             compiler_pkg = dependent_spec[language].package
