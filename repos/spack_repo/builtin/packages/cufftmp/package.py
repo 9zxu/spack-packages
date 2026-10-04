@@ -36,6 +36,8 @@ class Cufftmp(Package, CudaPackage):
     # https://docs.nvidia.com/cuda/cufftmp/license.html
     license("NVIDIA Software License Agreement")
 
+    skip_version_audit = ["platform=darwin", "platform=windows"]
+
     for ver, packages in _versions.items():
         package = packages.get(f"{platform.system()}-{platform.machine()}")
         if package:
